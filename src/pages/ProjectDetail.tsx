@@ -37,7 +37,7 @@ export default function ProjectDetail() {
   }
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
-  const images = projectImages[slug!] || [northlightHero];
+  const [heroImage = northlightHero, ...galleryImages] = [...new Set(projectImages[project.slug] ?? [])];
 
   const projectSchema = {
     "@context": "https://schema.org",
@@ -92,7 +92,7 @@ export default function ProjectDetail() {
           <ScrollReveal>
             <div className="aspect-[16/9] md:aspect-[21/9] overflow-hidden">
               <img
-                src={images[0]}
+                src={heroImage}
                 alt={`${project.title} - ${project.category} hero showcase`}
                 className="w-full h-full object-cover"
                 decoding="async"
@@ -167,63 +167,27 @@ export default function ProjectDetail() {
       </section>
 
       {/* Image Gallery */}
-      <section className="pb-16 md:pb-24">
-        <div className="container-editorial px-6 md:px-12 lg:px-20">
-          <div className="space-y-8 md:space-y-12">
-            {/* Full Width Image */}
-            <ScrollReveal>
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
-                  src={images[0]}
-                  alt={`${project.title} - Application overview and interface`}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            </ScrollReveal>
-
-            {/* Two Column */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-              <ScrollReveal>
-                <div className="aspect-[4/5] overflow-hidden">
-                  <img
-                    src={images[1]}
-                    alt={`${project.title} - Feature architecture preview`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={100}>
-                <div className="aspect-[4/5] overflow-hidden">
-                  <img
-                    src={images[2]}
-                    alt={`${project.title} - Detailed interface screen`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </ScrollReveal>
+      {galleryImages.length > 0 && (
+        <section className="pb-16 md:pb-24" aria-label="Project gallery">
+          <div className="container-editorial px-6 md:px-12 lg:px-20">
+            <div className={galleryImages.length > 1 ? "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12" : undefined}>
+              {galleryImages.map((image, index) => (
+                <ScrollReveal key={image} delay={index * 100}>
+                  <div className={galleryImages.length > 1 ? "aspect-[4/5] overflow-hidden" : "aspect-[16/10] overflow-hidden"}>
+                    <img
+                      src={image}
+                      alt={`${project.title} - Gallery image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </ScrollReveal>
+              ))}
             </div>
-
-            {/* Full Width Image */}
-            <ScrollReveal>
-              <div className="aspect-[21/9] overflow-hidden">
-                <img
-                  src={images[0]}
-                  alt={`${project.title} - Product design system view`}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-            </ScrollReveal>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Next Project */}
       <section className="border-t border-divider">
