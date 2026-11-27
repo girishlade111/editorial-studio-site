@@ -37,6 +37,8 @@ export function ScrollReveal({ children, className, delay = 0 }: ScrollRevealPro
       ref={ref}
       className={cn(
         "opacity-0 translate-y-8 transition-all duration-700 ease-editorial",
+        "motion-reduce:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none",
+        "print:opacity-100 print:translate-y-0 print:transition-none",
         isVisible && "opacity-100 translate-y-0",
         className
       )}
