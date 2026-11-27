@@ -88,6 +88,7 @@ export const HorizontalScrollGallery = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [trackWidth, setTrackWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -104,6 +105,9 @@ export const HorizontalScrollGallery = () => {
     const calculateTrackWidth = () => {
       if (trackRef.current) {
         setTrackWidth(trackRef.current.scrollWidth);
+      }
+      if (stickyRef.current) {
+        setViewportWidth(stickyRef.current.clientWidth);
       }
     };
 
@@ -137,13 +141,13 @@ export const HorizontalScrollGallery = () => {
   }, []);
 
   // Calculate how much we need to scroll the track
-  const horizontalScrollAmount = trackWidth - window.innerWidth;
-  const translateX = -scrollProgress * Math.max(0, horizontalScrollAmount);
+  const horizontalScrollAmount = Math.max(0, trackWidth - viewportWidth);
+  const translateX = -scrollProgress * horizontalScrollAmount;
 
   return (
     <section
       ref={containerRef}
-      className="relative w-screen -ml-[calc((100vw-100%)/2)]"
+      className="relative w-full"
       style={{ 
         // Height determines how long the scroll-hijack lasts
         // More height = slower horizontal scroll
