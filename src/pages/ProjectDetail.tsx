@@ -1,10 +1,11 @@
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { SEO } from "@/components/shared/SEO";
 import { SITE_CONFIG, createBreadcrumbSchema } from "@/lib/seo-config";
 import { projects } from "@/data/projects";
+import NotFound from "./NotFound";
 
 import northlightHero from "@/assets/projects/northlight-hero.jpg";
 import meridianHero from "@/assets/projects/meridian-hero.jpg";
@@ -33,7 +34,7 @@ export default function ProjectDetail() {
   const project = projects[projectIndex];
   
   if (!project) {
-    return <Navigate to="/work" replace />;
+    return <NotFound />;
   }
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
