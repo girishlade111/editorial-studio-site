@@ -35,7 +35,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div className="md:col-span-3 md:col-start-6">
-            <h4 className="eyebrow mb-4">Navigation</h4>
+            <p className="eyebrow mb-4">Navigation</p>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.path}>
@@ -52,7 +52,7 @@ export function Footer() {
 
           {/* Social */}
           <div className="md:col-span-3">
-            <h4 className="eyebrow mb-4">Connect</h4>
+            <p className="eyebrow mb-4">Connect</p>
             <ul className="space-y-3">
               {socialLinks.map((link) => (
                 <li key={link.name}>
