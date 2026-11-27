@@ -1,4 +1,4 @@
-import { useState, useEffect, useId } from "react";
+import { useState, useEffect, useId, useRef } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { ArrowRight, Check } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
@@ -62,29 +62,33 @@ function SelectionButton({ selected, value, children }: SelectionButtonProps) {
 
 function AnimatedNumber({ value }: { value: number }) {
   const [displayValue, setDisplayValue] = useState(value);
+  const currentValue = useRef(value);
 
   useEffect(() => {
-    const start = displayValue;
-    const end = value;
-    const duration = 400;
-    const startTime = Date.now();
+    const start = currentValue.current;
+    if (start === value) return;
 
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
+    let frame: number;
+    const duration = 400;
+    const startTime = performance.now();
+
+    const animate = (now: number) => {
+      const elapsed = Math.max(0, now - startTime);
       const progress = Math.min(elapsed / duration, 1);
       
       // Easing function
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      const current = start + (end - start) * easeOut;
-      
-      setDisplayValue(Math.round(current));
+      const current = start + (value - start) * easeOut;
+      currentValue.current = Math.round(current);
+      setDisplayValue(currentValue.current);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        frame = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
   }, [value]);
 
   return <>{displayValue.toLocaleString()}</>;
